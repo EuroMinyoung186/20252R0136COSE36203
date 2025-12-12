@@ -1,6 +1,7 @@
 __pycache__/
 *.pt
 *.pth
+*.part
 *.ckpt
 *.json
 
