@@ -51,7 +51,7 @@ class SettingDataset(Dataset):
     def __getitem__(self, idx):
         # 텍스트
         desc = self.description[idx]
-        key = self.keys[idx]
+        cid = self.keys[idx]
 
         # raw text만 반환 (tokenize는 collate_fn 또는 trainer에서)
         # 이미지도 PIL Image 그대로 반환
@@ -62,11 +62,11 @@ class SettingDataset(Dataset):
                 imgs[key] = Image.open(path).convert("RGB")
             except:
                 imgs[key] = Image.new("RGB", (256,256))
-
+        
         return {
             "description": desc,
             "footwear": imgs["footwear"],
             "pants": imgs["pants"],
             "top": imgs["top"],
-            "id": key
+            "id": cid
         }

@@ -1,5 +1,6 @@
 import os
 import torch
+import random
 from os.path import join as opj
 
 import cv2
@@ -61,6 +62,14 @@ def norm_for_albu(img, is_mask=False):
     return img
 
 def get_data(human_root_dir, cloth_root_dir, img_H, img_W, cloth_id, cloth_path, img_path,  data_type='test'):
+
+    with open(cloth_id, 'r') as f:
+        lines = f.readlines()
+    length = len(lines)
+    choice = random.randint(0, length - 1)
+    cloth_id = lines[choice].split('\t')[1]
+
+
     resize_ratio_H = 1.0
     resize_ratio_W = 1.0
     resize_transform = A.Resize(img_H, img_W)
@@ -79,17 +88,32 @@ def get_data(human_root_dir, cloth_root_dir, img_H, img_W, cloth_id, cloth_path,
                             "gt_cloth_warped_mask":"image",
                             }
     )
-
-    
+    image = imread_for_albu(opj(human_root_dir, data_type, "image", img_path))
+    H, W, _ = image.shape
     agn = imread_for_albu(opj(human_root_dir, data_type, "agnostic-v3.2", img_path))
     agn_mask = imread_for_albu(opj(human_root_dir, data_type, "agnostic-mask", img_path.replace(".jpg", "_mask.png")), is_mask=True)
-    cloth = imread_for_albu(opj(cloth_root_dir, "img_squares", cloth_id, cloth_path))
-    cloth_mask = imread_for_albu(opj(cloth_root_dir, "mask_squares", cloth_id, cloth_path), is_mask=True, cloth_mask_check=True)
-    
+    cloth = imread_for_albu(
+        opj(cloth_root_dir, "img_square", cloth_id, cloth_path),
+        use_resize=True,
+        height=H,
+        width=W,
+    )
+
+    cloth_mask = imread_for_albu(
+        opj(cloth_root_dir, "mask_square", cloth_id, cloth_path.replace('.jpg', '.png')),
+        is_mask=True,
+        cloth_mask_check=True,
+        use_resize=True,
+        height=H,
+        width=W,
+    )
+        
     gt_cloth_warped_mask = np.zeros_like(agn_mask)
         
-    image = imread_for_albu(opj(human_root_dir, data_type, "image", img_path))
+    
     image_densepose = imread_for_albu(opj(human_root_dir, data_type, "image-densepose", img_path))
+
+    
 
     if transform_size is not None:
         transformed = transform_size(

@@ -22,7 +22,7 @@ def build_args():
     parser.add_argument("--save_path", type=str, required=True)
     return parser.parse_args()
 
-def main(args):
+def inference(args):
     tokenizer = BertTokenizer.from_pretrained("google-bert/bert-base-uncased")
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -49,11 +49,11 @@ def main(args):
     }
 
     with torch.no_grad():
-        query_emb = model.encode_query(**tokenized_query)  # [1, D]
+        query_emb = model.encode_query(tokenized_query)  # [1, D]
         query_emb = F.normalize(query_emb, dim=1)
 
     sims = query_emb @ all_doc_embs.T
-    topk = torch.topk(sims, k=5, dim=1)
+    topk = torch.topk(sims, k=1, dim=1)
 
     top_indices = topk.indices[0].tolist()
     top_scores = topk.values[0].tolist()
@@ -65,15 +65,12 @@ def main(args):
             f.write(f"{rank}\t{img_id}\t{score:.4f}\n")
 
     print(f"✅ Saved Top-5 recommendations to {args.save_path}")
-    for r, i, s in zip(range(1, 6), top_ids, top_scores):
-        print(f"{r}. {i} ({s:.4f})")
     
 
 
 def main():
     args = build_args()
-
-    main(args)
+    inference(args)
 
 
 if __name__ == "__main__":

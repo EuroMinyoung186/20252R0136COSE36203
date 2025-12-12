@@ -95,3 +95,28 @@ def collate_fn_sample(batch):
 
         "id" : cid
     }
+
+
+def collate_fn_test(batch):
+    # ------------ TEXT ------------
+    recommendations = [item["recommendation"] for item in batch]
+
+    encoded_rec = tokenizer(
+        recommendations,
+        padding="max_length",
+        truncation=True,
+        max_length=256,
+        return_tensors="pt",
+    )
+    
+
+
+    # ------------ IMAGES ------------
+    cid = [item["id"] for item in batch]
+
+   
+    return {
+        "input_ids": encoded_rec["input_ids"],
+        "attention_mask": encoded_rec["attention_mask"],
+        "id" : cid
+    }

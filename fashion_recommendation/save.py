@@ -14,7 +14,7 @@ def build_args():
     parser.add_argument("--img_base_path", type=str, required=True)
     parser.add_argument("--json_file", type=str, required=True)
     parser.add_argument("--ckpt_path", type=str, required=True)
-    parser.add_argument("--save_path", type=str, default="doc_emb_db.pt")
+    parser.add_argument("--save_path", type=str)
     return parser.parse_args()
 
 

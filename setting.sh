@@ -1,17 +1,21 @@
-pip install torch==2.0.0+cu117 torchvision==0.15.1+cu117 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu117
-pip install pytorch-lightning==1.5.0
-pip install einops
-pip install opencv-python==4.7.0.72
-pip install matplotlib
-pip install omegaconf
-pip install albumentations
-pip install transformers
-pip install xformers==0.0.19
-pip install triton==2.0.0
-pip install open-clip-torch==2.19.0
-pip install diffusers==0.20.2
-pip install scipy==1.10.1
-pip install openai
+python -m pip install torch torchvision torchaudio
+python -m pip install pytorch-lightning
+python -m pip install einops
+python -m pip install opencv-python
+python -m pip install matplotlib
+python -m pip install omegaconf
+python -m pip install albumentations
+python -m pip install transformers
+python -m pip install xformers
+python -m pip install triton
+python -m pip install open-clip-torch
+python -m pip install diffusers
+python -m pip install scipy
+python -m pip install openai
+python -m pip install tqdm
+python -m pip install pyyaml
+python -m pip install requests
+python -m pip install scikit-image
 conda install -c anaconda ipython -y
 
 # conda create --name TMP python=3.10 -y

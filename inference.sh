@@ -12,3 +12,9 @@ recommendation=$(python llm_generation/inference_rec.py \
             --situation $situations
             --api_key $API_KEY
             )
+
+python fashion_recommendation/inference.py \
+    --recommendation $recommendation \
+    --database_path $db_path \
+    --ckpt_path $ckpt_path \
+    --save_path $save_path
