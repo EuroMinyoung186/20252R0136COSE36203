@@ -1,0 +1,8 @@
+__pycache__/
+*.pt
+*.pth
+*.ckpt
+*.json
+
+/data/cloth/
+/data/human/
