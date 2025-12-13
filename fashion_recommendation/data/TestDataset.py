@@ -24,7 +24,7 @@ class TestDataset(Dataset):
 
     def __getitem__(self, idx):
         rec = self.recommendations[idx]
-        img_id = self.img_id
+        img_id = self.img_id[idx]
 
         return {
             "id" : img_id,

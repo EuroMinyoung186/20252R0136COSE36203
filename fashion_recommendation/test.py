@@ -108,7 +108,12 @@ def test(args):
             input_ids = batch["input_ids"].to(device, non_blocking=True)
             attention_mask = batch["attention_mask"].to(device, non_blocking=True)
 
-            query_emb = model.encode_query(input_ids=input_ids, attention_mask=attention_mask)  # [B, D]
+            batch_desc = {
+                'input_ids' : input_ids,
+                'attention_mask' : attention_mask
+            }
+
+            query_emb = model.encode_query(batch_desc)  # [B, D]
             query_emb = F.normalize(query_emb, dim=1)
 
             sims = query_emb @ all_doc_embs.t()  # [B, N]
@@ -122,6 +127,7 @@ def test(args):
             # hits + top1
             if torch.is_tensor(topk_ids):
                 # topk_ids: Tensor[B,K]
+                
                 gt_t = torch.tensor(gt_list, device=topk_ids.device) if not torch.is_tensor(cid) else cid.to(topk_ids.device)
                 gt_t = gt_t.view(-1, 1)
                 hits = (topk_ids == gt_t).any(dim=1)  # [B]
@@ -132,6 +138,8 @@ def test(args):
                 topk_list = topk_ids.detach().cpu().tolist()
             else:
                 # topk_ids: List[List[id]]
+                print(gt_list[0] in topk_ids[0])
+                print(len(gt_list[0]), len(topk_ids[0]))
                 hits_bool = [gt in cand for gt, cand in zip(gt_list, topk_ids)]
                 hitk_batch = sum(hits_bool)
                 hit1_batch = sum(1 for gt, cand in zip(gt_list, topk_ids) if cand[0] == gt)
