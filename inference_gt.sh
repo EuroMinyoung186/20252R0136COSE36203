@@ -6,11 +6,11 @@ export db_path="data/cloth/doc_toens_db.pt"
 export ckpt_path="fashion_recommendation/ckpt/ckpt.pt"
 export save_path="data/tmp.txt"
 
-#python fashion_recommendation/save.py \
-#    --img_base_path data/cloth/img_square \
-#    --json_file data/cloth/test.json \
-#    --ckpt_path $ckpt_path \
-#    --save_path $db_path
+python fashion_recommendation/save.py \
+    --img_base_path data/cloth/img_square \
+    --json_file data/cloth/test.json \
+    --ckpt_path $ckpt_path \
+    --save_path $db_path
 
 python fashion_recommendation/inference.py \
     --recommendation "$recommendation" \
