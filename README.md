@@ -64,5 +64,3 @@ NVIDIA TITAN RTX x 8
 - [김민영](https://github.com/EuroMinyoung186/)
 - 장충준
 - 진혜성
-
-- [진혜성]()
