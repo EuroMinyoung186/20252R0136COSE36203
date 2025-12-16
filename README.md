@@ -8,51 +8,61 @@
 
 ## 방법론
 
-![image]
+![image](https://github.com/user-attachments/assets/1655ab6f-0724-40f5-b183-7452347dd931)
 
 ### 데이터셋
-Tag가 붙어있는 인터넷 짤들을 크롤링하여 수집. (2runzzal.com, Jjalbang.today, jjalbang.net 사이트에서 데이터 수집)
+Multimodal-Deepfashion과 VITON-HD 데이터셋을 활용하여, 옷 추천과 가상 피팅을 진행함.
 
 ### 모델
-![image](https://github.com/AIKU-Official/Magical_SOLARgodong/assets/80198264/cb47d752-54ef-4227-adb0-e6966fdab7ea)
+Cross-Attention을 활용한 Mapping Layer와 query-document cosine similarity를 통한 상황-옷 추천 모듈을 개발함.
 
-Sbert를 사용하여 입력 query와 이미지 태그들 사이의 유사도를 도출하고 상위 K개를 추출
-
-LLM(OPEN-SOLAR-KO-10.7B)를 사용하여 이미지 태그들이 감정이나 상황 등의 정보를 담을 수 있도록 가다듬는 역할과 Sbert를 사용하여 추출한 특정 query에 맞는 상위 K개의 이미지 중 하나의 이미지를 최종 output으로 결정하는 역할을 담당
-
-BLIP-2를 사용하여 이미지 캡셔닝을 진행. 기존 크롤링으로 수집한 태그들로는 부족한 이미지에 대한 설명을 보충하는 역할을 담당.
+[StableVITON](https://github.com/rlawjdghek/StableVITON)을 활용한 Virtual Try-on까지 가능한 pipeline 구성
 
 ## 환경 설정
-Google Colab Pro A100
+NVIDIA TITAN RTX x 8
 
-## TODO List
-- [x] Modulization
-- [ ] Reveal our Meme Dataset
-- [ ] Update Summarization Model
-- [ ] Making DB Systems
-- [ ] Training Retriever
 
 ## 사용 방법
-1. 데이터셋을 준비해주세요.
-2. 데이터셋 전처리를 해주세요. (공개할 데이터셋은 2번까지 처리되어 있을 예정입니다.)
+1. 데이터셋을 준비해주세요. 데이터셋은 다음 drive에서 다운로드 가능합니다. [Google Drive](https://drive.google.com/drive/folders/1NP4U68feUHDyWosfTOGfcI5VFBBX29ny?hl=ko)
+  ```text
+  project-root/
+  ├── data/
+  │   ├── cloth/
+  │   │      ├── img/
+  │   │      ├── segm/
+  │   │      └── captions.json
+  │   └── human/
+  │         └──VITON-HD/
+  ├── fashion_recommendation/
+  │   ├── model.py
+  │   └── train.py
+  ├── StableVITON/
+  │   └── ckpt/
+  │         ├── VITONHD_VAE_finetuning.ckpt
+  │         ├── VITONHD_PBE_pose.ckpt
+  │         └── VITONHD.ckpt
   ```
-  cd data
-  python data_preprocessing.py
+
+2. 데이터셋 전처리를 해주세요. (google drive에 전처리가 완료된 코드까지 넣어두었습니다.)
   ```
-3. 데이터셋을 바탕으로 사용자 query를 입력해주세요.
+  sh llm_generation.sh
+  ```
+3. 데이터셋을 바탕으로 추천 모델을 학습시켜주세요.
  ```
- python main.py --user_input 꼭 이번에는 성공할거야
-                  --filename input.csv
+ sh train.sh
  ```
-
-## 예시 결과
-![image](https://github.com/AIKU-Official/Magical_SOLARgodong/assets/80198264/9a78913d-a947-4b8d-b981-44a2ecdb1d19)
-
-![image](https://github.com/AIKU-Official/Magical_SOLARgodong/assets/80198264/661a9f15-b312-450f-b3d6-8029eeb4b2e0)
-
-![image](https://github.com/AIKU-Official/Magical_SOLARgodong/assets/80198264/17212892-7f20-4a2e-8be1-54ca8a60e073)
+4. inference_gt.sh를 실행하시면, virtual try-on까지 한번에 추론 가능합니다.
+ ```
+ sh inference_gt.sh
+ ```
+5. 추천 시스템 모델의 성능을 test.sh로 실행 가능합니다.
+ ```
+ sh test.sh
+ ```
 
 ## 팀원
 - [김민영](https://github.com/EuroMinyoung186/)
-- [박서현](https://github.com/emiliebell)
-- [박정규](https://github.com/juk1329)
+- 장충준
+- 진혜성
+
+- [진혜성]()
